@@ -1,4 +1,4 @@
-# ClinicFlow GitOps Repository (Helm + Argo CD)
+# ClinicFlow GitOps Repository (Jenkins + Argo CD)
 
 This repository contains the **GitOps source of truth** for deploying **ClinicFlow** into **Dev / Staging / Prod** Kubernetes clusters using:
 
