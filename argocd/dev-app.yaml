@@ -4,11 +4,11 @@ metadata:
   name: clinicflow-dev
   namespace: argocd
 spec:
-  project: default
+  project: clinicflow
 
   source:
     repoURL: https://github.com/Bludive-Devops-Platform/clinicflow-gitops.git
-    targetRevision: main
+    targetRevision: HEAD
     path: charts/clinicflow
     helm:
       valueFiles:
