@@ -1,0 +1,113 @@
+global:
+  namespace: clinicflow
+  envName: default
+
+  # ingress
+  ingress:
+    enabled: true
+    className: nginx
+    host: example.local
+    tls:
+      enabled: true
+      secretName: clinicflow-tls
+    paths:
+      web: /
+      identity: /identity
+      scheduling: /scheduling
+      profiles: /profiles
+      notifications: /notifications
+
+  # storage
+  storageClass: nfs-dev
+
+  # image pull
+  imagePullSecrets: []   # e.g. [{ name: regcred }]
+
+images:
+  identity:
+    repository: docker.io/bludivehub/clinicflow-identity
+    tag: "sha-REPLACE"
+  scheduling:
+    repository: docker.io/bludivehub/clinicflow-scheduling
+    tag: "sha-REPLACE"
+  profiles:
+    repository: docker.io/bludivehub/clinicflow-profiles
+    tag: "sha-REPLACE"
+  notifications:
+    repository: docker.io/bludivehub/clinicflow-notifications
+    tag: "sha-REPLACE"
+  web:
+    repository: docker.io/bludivehub/clinicflow-web
+    tag: "sha-REPLACE"
+
+replicas:
+  identity: 1
+  scheduling: 1
+  profiles: 1
+  notifications: 1
+  web: 1
+
+resources:
+  defaults:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 300m
+      memory: 512Mi
+
+ports:
+  identity: 3000
+  scheduling: 3002
+  profiles: 3003
+  notifications: 3004
+  web: 3005
+
+postgres:
+  common:
+    image: postgres:16-alpine
+    storageSize: 5Gi
+
+  identity:
+    enabled: true
+    dbName: identity_db
+    user: identity_user
+    password: change-me
+  scheduling:
+    enabled: true
+    dbName: scheduling_db
+    user: scheduling_user
+    password: change-me
+  profiles:
+    enabled: true
+    dbName: profiles_db
+    user: profiles_user
+    password: change-me
+  notifications:
+    enabled: true
+    dbName: notifications_db
+    user: notifications_user
+    password: change-me
+
+appConfig:
+  # For demo simplicity, put non-secrets here. Secrets stay in K8s Secret.
+  identity:
+    # example: JWT_ISSUER, etc
+    CORS_ORIGINS: ""
+  scheduling:
+    CORS_ORIGINS: ""
+    NOTIFICATIONS_BASE_URL: "http://clinicflow-notifications:3004"
+  profiles:
+    CORS_ORIGINS: ""
+  notifications:
+    CORS_ORIGINS: ""
+
+webConfig:
+  # IMPORTANT: use ingress-relative paths in Kubernetes
+  NEXT_PUBLIC_IDENTITY_API: "/identity"
+  NEXT_PUBLIC_SCHEDULING_API: "/scheduling"
+  NEXT_PUBLIC_PROFILES_API: "/profiles"
+  NEXT_PUBLIC_NOTIFICATIONS_API: "/notifications"
+
+migrations:
+  enabled: true

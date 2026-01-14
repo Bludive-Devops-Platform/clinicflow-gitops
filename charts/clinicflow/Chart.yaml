@@ -1,0 +1,6 @@
+apiVersion: v2
+name: clinicflow
+description: ClinicFlow (Identity, Scheduling, Profiles, Notifications, Web) + 4 Postgres DBs
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

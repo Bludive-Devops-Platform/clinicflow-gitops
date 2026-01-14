@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clinicflow-notifications
+  namespace: {{ include "clinicflow.namespace" . }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  replicas: {{ .Values.replicas.notifications }}
+  selector:
+    matchLabels:
+      app: clinicflow-notifications
+  template:
+    metadata:
+      labels:
+        app: clinicflow-notifications
+        {{- include "clinicflow.labels" . | nindent 8 }}
+    spec:
+      {{- if .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml .Values.global.imagePullSecrets | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: notifications
+          image: "{{ .Values.images.notifications.repository }}:{{ .Values.images.notifications.tag }}"
+          ports:
+            - containerPort: {{ .Values.ports.notifications }}
+          env:
+            - name: PORT
+              value: {{ .Values.ports.notifications | quote }}
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: notifications-db-secret
+                  key: DATABASE_URL
+            - name: CORS_ORIGINS
+              value: {{ .Values.appConfig.notifications.CORS_ORIGINS | quote }}
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.ports.notifications }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.ports.notifications }}
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            {{- toYaml .Values.resources.defaults | nindent 12 }}

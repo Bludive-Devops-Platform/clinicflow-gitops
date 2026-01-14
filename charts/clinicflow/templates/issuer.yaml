@@ -1,0 +1,9 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: clinicflow-selfsigned
+  namespace: {{ include "clinicflow.namespace" . }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+spec:
+  selfSigned: {}

@@ -1,0 +1,16 @@
+{{- if and .Values.global.ingress.enabled .Values.global.ingress.tls.enabled }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: clinicflow-cert
+  namespace: {{ include "clinicflow.namespace" . }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+spec:
+  secretName: {{ .Values.global.ingress.tls.secretName }}
+  issuerRef:
+    name: clinicflow-selfsigned
+    kind: Issuer
+  dnsNames:
+    - {{ .Values.global.ingress.host | quote }}
+{{- end }}

@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clinicflow-web
+  namespace: {{ include "clinicflow.namespace" . }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  replicas: {{ .Values.replicas.web }}
+  selector:
+    matchLabels:
+      app: clinicflow-web
+  template:
+    metadata:
+      labels:
+        app: clinicflow-web
+        {{- include "clinicflow.labels" . | nindent 8 }}
+    spec:
+      {{- if .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml .Values.global.imagePullSecrets | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: web
+          image: "{{ .Values.images.web.repository }}:{{ .Values.images.web.tag }}"
+          ports:
+            - containerPort: {{ .Values.ports.web }}
+
+          # Inject the frontend API base paths (Ingress-relative)
+          env:
+            - name: NEXT_PUBLIC_IDENTITY_API
+              value: {{ .Values.webConfig.NEXT_PUBLIC_IDENTITY_API | quote }}
+            - name: NEXT_PUBLIC_SCHEDULING_API
+              value: {{ .Values.webConfig.NEXT_PUBLIC_SCHEDULING_API | quote }}
+            - name: NEXT_PUBLIC_PROFILES_API
+              value: {{ .Values.webConfig.NEXT_PUBLIC_PROFILES_API | quote }}
+            - name: NEXT_PUBLIC_NOTIFICATIONS_API
+              value: {{ .Values.webConfig.NEXT_PUBLIC_NOTIFICATIONS_API | quote }}
+
+          # Health checks
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.ports.web }}
+            initialDelaySeconds: 15
+            periodSeconds: 20
+
+          resources:
+            {{- toYaml .Values.resources.defaults | nindent 12 }}

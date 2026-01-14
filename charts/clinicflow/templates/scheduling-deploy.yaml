@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clinicflow-scheduling
+  namespace: {{ include "clinicflow.namespace" . }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  replicas: {{ .Values.replicas.scheduling }}
+  selector:
+    matchLabels:
+      app: clinicflow-scheduling
+  template:
+    metadata:
+      labels:
+        app: clinicflow-scheduling
+        {{- include "clinicflow.labels" . | nindent 8 }}
+    spec:
+      {{- if .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml .Values.global.imagePullSecrets | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: scheduling
+          image: "{{ .Values.images.scheduling.repository }}:{{ .Values.images.scheduling.tag }}"
+          ports:
+            - containerPort: {{ .Values.ports.scheduling }}
+          env:
+            - name: PORT
+              value: {{ .Values.ports.scheduling | quote }}
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: scheduling-db-secret
+                  key: DATABASE_URL
+            - name: CORS_ORIGINS
+              value: {{ .Values.appConfig.scheduling.CORS_ORIGINS | quote }}
+            - name: NOTIFICATIONS_BASE_URL
+              value: {{ .Values.appConfig.scheduling.NOTIFICATIONS_BASE_URL | quote }}
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.ports.scheduling }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.ports.scheduling }}
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            {{- toYaml .Values.resources.defaults | nindent 12 }}

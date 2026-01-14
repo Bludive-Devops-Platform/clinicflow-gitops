@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clinicflow-profiles
+  namespace: {{ include "clinicflow.namespace" . }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  replicas: {{ .Values.replicas.profiles }}
+  selector:
+    matchLabels:
+      app: clinicflow-profiles
+  template:
+    metadata:
+      labels:
+        app: clinicflow-profiles
+        {{- include "clinicflow.labels" . | nindent 8 }}
+    spec:
+      {{- if .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml .Values.global.imagePullSecrets | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: profiles
+          image: "{{ .Values.images.profiles.repository }}:{{ .Values.images.profiles.tag }}"
+          ports:
+            - containerPort: {{ .Values.ports.profiles }}
+          env:
+            - name: PORT
+              value: {{ .Values.ports.profiles | quote }}
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: profiles-db-secret
+                  key: DATABASE_URL
+            - name: CORS_ORIGINS
+              value: {{ .Values.appConfig.profiles.CORS_ORIGINS | quote }}
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.ports.profiles }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.ports.profiles }}
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            {{- toYaml .Values.resources.defaults | nindent 12 }}

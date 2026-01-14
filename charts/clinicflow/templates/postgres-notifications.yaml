@@ -1,0 +1,55 @@
+{{- if .Values.postgres.notifications.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: notifications-db
+  namespace: {{ include "clinicflow.namespace" . }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+  selector:
+    app: notifications-db
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: notifications-db
+  namespace: {{ include "clinicflow.namespace" . }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  serviceName: notifications-db
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notifications-db
+  template:
+    metadata:
+      labels:
+        app: notifications-db
+        {{- include "clinicflow.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: postgres
+          image: {{ .Values.postgres.common.image }}
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: notifications-db-secret
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: {{ .Values.global.storageClass | quote }}
+        resources:
+          requests:
+            storage: {{ .Values.postgres.common.storageSize | quote }}
+{{- end }}

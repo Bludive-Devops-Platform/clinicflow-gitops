@@ -1,0 +1,77 @@
+global:
+  namespace: clinicflow-dev
+  envName: dev
+
+  storageClass: nfs-dev
+
+  ingress:
+    enabled: true
+    className: nginx
+    host: clinicflow-dev.192.168.60.81.nip.io
+    tls:
+      enabled: true
+      secretName: clinicflow-dev-tls
+
+replicas:
+  identity: 1
+  scheduling: 1
+  profiles: 1
+  notifications: 1
+  web: 1
+
+postgres:
+  common:
+    storageSize: 5Gi
+
+  identity:
+    enabled: true
+    dbName: identity_db
+    user: identity_user
+    password: identity_dev_pw
+
+  scheduling:
+    enabled: true
+    dbName: scheduling_db
+    user: scheduling_user
+    password: scheduling_dev_pw
+
+  profiles:
+    enabled: true
+    dbName: profiles_db
+    user: profiles_user
+    password: profiles_dev_pw
+
+  notifications:
+    enabled: true
+    dbName: notifications_db
+    user: notifications_user
+    password: notifications_dev_pw
+
+webConfig:
+  NEXT_PUBLIC_IDENTITY_API: "/identity"
+  NEXT_PUBLIC_SCHEDULING_API: "/scheduling"
+  NEXT_PUBLIC_PROFILES_API: "/profiles"
+  NEXT_PUBLIC_NOTIFICATIONS_API: "/notifications"
+
+appConfig:
+  identity:
+    CORS_ORIGINS: ""
+  scheduling:
+    CORS_ORIGINS: ""
+    NOTIFICATIONS_BASE_URL: "http://clinicflow-notifications:3004"
+  profiles:
+    CORS_ORIGINS: ""
+  notifications:
+    CORS_ORIGINS: ""
+
+images:
+  identity:
+    tag: "sha-<commit>"
+  scheduling:
+    tag: "sha-<commit>"
+  profiles:
+    tag: "sha-<commit>"
+  notifications:
+    tag: "sha-<commit>"
+  web:
+    tag: "sha-<commit>"
