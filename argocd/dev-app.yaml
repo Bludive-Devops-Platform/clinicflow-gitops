@@ -8,7 +8,7 @@ spec:
 
   source:
     repoURL: https://github.com/Bludive-Devops-Platform/clinicflow-gitops.git
-    targetRevision: HEAD
+    targetRevision: main
     path: charts/clinicflow
     helm:
       valueFiles:
