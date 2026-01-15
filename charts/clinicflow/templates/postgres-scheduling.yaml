@@ -32,17 +32,33 @@ spec:
         app: scheduling-db
         {{- include "clinicflow.labels" . | nindent 8 }}
     spec:
+      securityContext:
+        fsGroup: 999
+        fsGroupChangePolicy: "OnRootMismatch"
+
       containers:
         - name: postgres
           image: {{ .Values.postgres.common.image }}
           ports:
             - containerPort: 5432
+
+          securityContext:
+            runAsUser: 999
+            runAsGroup: 999
+
+          env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data
+
           envFrom:
             - secretRef:
                 name: scheduling-db-secret
+
           volumeMounts:
             - name: data
               mountPath: /var/lib/postgresql/data
+              subPath: pgdata
+
   volumeClaimTemplates:
     - metadata:
         name: data
