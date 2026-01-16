@@ -110,4 +110,4 @@ webConfig:
   NEXT_PUBLIC_NOTIFICATIONS_API: "/notifications"
 
 migrations:
-  enabled: true
+  enabled: false
