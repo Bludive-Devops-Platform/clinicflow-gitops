@@ -26,19 +26,19 @@ global:
 images:
   identity:
     repository: docker.io/bludivehub/clinicflow-identity
-    tag: "sha-REPLACE"
+    tag: "v1"
   scheduling:
     repository: docker.io/bludivehub/clinicflow-scheduling
-    tag: "sha-REPLACE"
+    tag: "v1"
   profiles:
     repository: docker.io/bludivehub/clinicflow-profiles
-    tag: "sha-REPLACE"
+    tag: "v1"
   notifications:
     repository: docker.io/bludivehub/clinicflow-notifications
-    tag: "sha-REPLACE"
+    tag: "v1"
   web:
     repository: docker.io/bludivehub/clinicflow-web
-    tag: "sha-REPLACE"
+    tag: "v1"
 
 replicas:
   identity: 1

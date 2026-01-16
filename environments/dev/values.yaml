@@ -66,12 +66,12 @@ appConfig:
 
 images:
   identity:
-    tag: "sha-<commit>"
+    tag: "v1"
   scheduling:
-    tag: "sha-<commit>"
+    tag: "v1"
   profiles:
-    tag: "sha-<commit>"
+    tag: "v1"
   notifications:
-    tag: "sha-<commit>"
+    tag: "v1"
   web:
-    tag: "sha-<commit>"
+    tag: "v1"
