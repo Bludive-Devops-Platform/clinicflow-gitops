@@ -111,3 +111,6 @@ webConfig:
 
 migrations:
   enabled: true
+
+identity:
+  jwtSecret: "UcosRr4zywM0a6C8hZP9b6hMH33plV+lRYuUHWqoEhQ5Im8TXxK0ougT6pcGz1Hy"

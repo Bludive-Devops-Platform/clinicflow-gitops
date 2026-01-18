@@ -35,6 +35,11 @@ spec:
                   key: DATABASE_URL
             - name: CORS_ORIGINS
               value: {{ .Values.appConfig.identity.CORS_ORIGINS | quote }}
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: identity-app-secret
+                  key: JWT_SECRET
           readinessProbe:
             httpGet:
               path: /health
