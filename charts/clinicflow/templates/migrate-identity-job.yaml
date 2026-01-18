@@ -45,5 +45,5 @@ spec:
                   key: DATABASE_URL
           command: ["sh", "-lc"]
           args:
-            - "pnpm prisma migrate deploy"
+            - "./node_modules/.bin/prisma migrate deploy"
 {{- end }}
