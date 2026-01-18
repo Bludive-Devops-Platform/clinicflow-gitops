@@ -21,8 +21,7 @@ global:
   storageClass: nfs-dev
 
   # image pull
-  imagePullSecrets:
-    - name: regcred
+  imagePullSecrets: []
 
 images:
   identity:

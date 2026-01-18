@@ -8,16 +8,30 @@ metadata:
     argocd.argoproj.io/sync-wave: "2"
 spec:
   backoffLimit: 3
+  ttlSecondsAfterFinished: 3600
   template:
     metadata:
       labels:
         {{- include "clinicflow.labels" . | nindent 8 }}
     spec:
-      restartPolicy: OnFailure
+      restartPolicy: Never
+
       {{- if .Values.global.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml .Values.global.imagePullSecrets | nindent 8 }}
       {{- end }}
+
+      initContainers:
+        - name: wait-for-db
+          image: postgres:16-alpine
+          command: ["sh", "-lc"]
+          args:
+            - |
+              until pg_isready -h notifications-db -p 5432; do
+                echo "Waiting for notifications-db..."
+                sleep 2
+              done
+
       containers:
         - name: migrate
           image: "{{ .Values.images.notifications.repository }}:{{ .Values.images.notifications.tag }}"
