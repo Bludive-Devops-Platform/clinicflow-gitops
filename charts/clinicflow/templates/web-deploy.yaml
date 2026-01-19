@@ -42,13 +42,13 @@ spec:
           # Health checks
           readinessProbe:
             httpGet:
-              path: /health
+              path: /
               port: {{ .Values.ports.web }}
             initialDelaySeconds: 5
             periodSeconds: 10
           livenessProbe:
             httpGet:
-              path: /health
+              path: /
               port: {{ .Values.ports.web }}
             initialDelaySeconds: 15
             periodSeconds: 20
