@@ -23,6 +23,8 @@ spec:
       containers:
         - name: profiles
           image: "{{ .Values.images.profiles.repository }}:{{ .Values.images.profiles.tag }}"
+          command: ["node"]
+          args: ["dist/main.js"]
           ports:
             - containerPort: {{ .Values.ports.profiles }}
           env:
