@@ -2,17 +2,19 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: identity-migrate
+  generateName: identity-migrate-
   namespace: {{ include "clinicflow.namespace" . }}
   annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
     argocd.argoproj.io/sync-wave: "2"
-    argocd.argoproj.io/sync-options: Replace=true
 spec:
   backoffLimit: 3
   ttlSecondsAfterFinished: 3600
   template:
     metadata:
       labels:
+        job: identity-migrate
         {{- include "clinicflow.labels" . | nindent 8 }}
     spec:
       restartPolicy: Never
