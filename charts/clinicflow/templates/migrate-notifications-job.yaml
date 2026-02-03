@@ -5,8 +5,6 @@ metadata:
   generateName: notifications-migrate-
   namespace: {{ include "clinicflow.namespace" . }}
   annotations:
-    argocd.argoproj.io/hook: PreSync
-    argocd.argoproj.io/hook-delete-policy: HookSucceeded
     argocd.argoproj.io/sync-wave: "2"
 spec:
   backoffLimit: 3
@@ -30,10 +28,13 @@ spec:
           command: ["sh", "-lc"]
           args:
             - |
-              until pg_isready -h notifications-db -p 5432; do
-                echo "Waiting for notifications-db..."
+              echo "Waiting for notifications-db..."
+              for i in $(seq 1 180); do
+                pg_isready -h notifications-db -p 5432 && exit 0
                 sleep 2
               done
+              echo "Timed out waiting for notifications-db"
+              exit 1
 
       containers:
         - name: migrate
