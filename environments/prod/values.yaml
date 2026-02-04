@@ -1,9 +1,7 @@
 global:
   namespace: clinicflow-prod
   envName: prod
-
   storageClass: nfs-prod
-
   ingress:
     enabled: true
     className: nginx
@@ -11,48 +9,40 @@ global:
     tls:
       enabled: true
       secretName: clinicflow-prod-tls
-
 replicas:
   identity: 2
   scheduling: 2
   profiles: 2
   notifications: 2
   web: 2
-
 postgres:
   common:
     storageSize: 20Gi
-
   identity:
     enabled: true
     dbName: identity_db
     user: identity_user
     password: identity_prod_pw
-
   scheduling:
     enabled: true
     dbName: scheduling_db
     user: scheduling_user
     password: scheduling_prod_pw
-
   profiles:
     enabled: true
     dbName: profiles_db
     user: profiles_user
     password: profiles_prod_pw
-
   notifications:
     enabled: true
     dbName: notifications_db
     user: notifications_user
     password: notifications_prod_pw
-
 webConfig:
   NEXT_PUBLIC_IDENTITY_API: "/identity"
   NEXT_PUBLIC_SCHEDULING_API: "/scheduling"
   NEXT_PUBLIC_PROFILES_API: "/profiles"
   NEXT_PUBLIC_NOTIFICATIONS_API: "/notifications"
-
 appConfig:
   identity:
     CORS_ORIGINS: ""
@@ -63,10 +53,9 @@ appConfig:
     CORS_ORIGINS: ""
   notifications:
     CORS_ORIGINS: ""
-
 images:
   identity:
-    tag: "v1"
+    tag: "sha-a53d753"
   scheduling:
     tag: "v1"
   profiles:
