@@ -63,4 +63,4 @@ images:
   notifications:
     tag: "sha-3f2482c"
   web:
-    tag: "v1"
+    tag: "sha-3f1dbbf"
