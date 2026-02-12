@@ -59,7 +59,7 @@ images:
   scheduling:
     tag: "v1"
   profiles:
-    tag: "v1"
+    tag: "v2"
   notifications:
     tag: "v1"
   web:
