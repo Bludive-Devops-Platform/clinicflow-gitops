@@ -55,12 +55,12 @@ appConfig:
     CORS_ORIGINS: ""
 images:
   identity:
-    tag: "sha-a53d753"
+    tag: "sha-096dfab"
   scheduling:
-    tag: "v1"
+    tag: "sha-096dfab"
   profiles:
-    tag: "v2"
+    tag: "sha-096dfab"
   notifications:
-    tag: "v1"
+    tag: "sha-096dfab"
   web:
-    tag: "v1"
+    tag: "sha-096dfab"
