@@ -32,7 +32,7 @@ images:
     tag: "v1"
   profiles:
     repository: docker.io/bludivehub/clinicflow-profiles
-    tag: "v1"
+    tag: "v2"
   notifications:
     repository: docker.io/bludivehub/clinicflow-notifications
     tag: "v1"
