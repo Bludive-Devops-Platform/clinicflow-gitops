@@ -59,7 +59,7 @@ images:
   scheduling:
     tag: "sha-096dfab"
   profiles:
-    tag: "sha-096dfab"
+    tag: "v2"
   notifications:
     tag: "sha-096dfab"
   web:
