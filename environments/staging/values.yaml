@@ -55,12 +55,12 @@ appConfig:
     CORS_ORIGINS: ""
 images:
   identity:
-    tag: "d311b66936813d5e5ef2df2f6513d9c080ade52b"
+    tag: "sha256:d91c35c9f2573fa8a52ed9f380cd1242ed189f263756fc305f8fba83245e75fb"
   scheduling:
-    tag: "d311b66936813d5e5ef2df2f6513d9c080ade52b"
+    tag: "sha256:d91c35c9f2573fa8a52ed9f380cd1242ed189f263756fc305f8fba83245e75fb"
   profiles:
-    tag: "d311b66936813d5e5ef2df2f6513d9c080ade52b"
+    tag: "sha256:d91c35c9f2573fa8a52ed9f380cd1242ed189f263756fc305f8fba83245e75fb"
   notifications:
-    tag: "d311b66936813d5e5ef2df2f6513d9c080ade52b"
+    tag: "sha256:d91c35c9f2573fa8a52ed9f380cd1242ed189f263756fc305f8fba83245e75fb"
   web:
-    tag: "d311b66936813d5e5ef2df2f6513d9c080ade52b"
+    tag: "sha256:d91c35c9f2573fa8a52ed9f380cd1242ed189f263756fc305f8fba83245e75fb"
